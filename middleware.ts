@@ -1,5 +1,8 @@
-import { auth } from '@/lib/auth'
+import NextAuth from 'next-auth'
+import { authConfig } from '@/auth.config'
 import { NextResponse } from 'next/server'
+
+const { auth } = NextAuth(authConfig)
 
 const PUBLIC_ROUTES = ['/login', '/signup', '/teacher-login']
 
@@ -13,7 +16,6 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  // Teacher → portal, student → dashboard role guards
   if (isLoggedIn && role === 'teacher' && nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/portal', req.url))
   }
@@ -22,7 +24,6 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  // Already logged in — redirect away from auth pages
   if (isLoggedIn && isPublic) {
     return NextResponse.redirect(new URL(role === 'teacher' ? '/portal' : '/dashboard', req.url))
   }

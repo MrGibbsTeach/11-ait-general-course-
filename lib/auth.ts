@@ -2,31 +2,10 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { pool } from '@/lib/db'
+import { authConfig } from '@/auth.config'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: 'jwt' },
-  pages: {
-    signIn: '/login',
-    error: '/login',
-  },
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        token.role = (user as { role?: string }).role
-        token.fullName = (user as { fullName?: string }).fullName
-        token.classCode = (user as { classCode?: string | null }).classCode ?? null
-      }
-      return token
-    },
-    session({ session, token }) {
-      session.user.id = token.id as string
-      session.user.role = token.role as string
-      session.user.fullName = token.fullName as string
-      session.user.classCode = (token.classCode as string | null) ?? null
-      return session
-    },
-  },
+  ...authConfig,
   providers: [
     // Students: username only, no password
     Credentials({
