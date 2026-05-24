@@ -1,14 +1,7 @@
 import Link from 'next/link'
-import { auth } from '@/lib/auth'
 import { getUnits } from '@/lib/db-queries/courses'
-import SignOutButton from '@/components/SignOutButton'
-
-function initials(name: string) {
-  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-}
 
 export default async function StudentSidebar() {
-  const session = await auth()
   const units = await getUnits()
 
   return (
@@ -26,7 +19,7 @@ export default async function StudentSidebar() {
           Course
         </div>
 
-        <NavItem href="/dashboard" icon="⊞" label="Dashboard" />
+        <NavItem href="/dashboard" icon="⊞" label="Overview" />
 
         {units.map((unit, i) => {
           const locked = unit.status !== 'available'
@@ -62,24 +55,6 @@ export default async function StudentSidebar() {
           )
         })}
       </nav>
-
-      {/* User footer */}
-      <div style={{ padding: '12px 16px', borderTop: '1px solid #E0E0E0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#EAF0FD', color: '#1865F2', fontWeight: 700, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            {initials(session?.user?.fullName ?? session?.user?.name ?? 'S')}
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#1B1B1B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {session?.user?.fullName ?? session?.user?.name}
-            </div>
-            <div style={{ fontSize: 11, color: '#6B7280' }}>Student</div>
-          </div>
-        </div>
-        <SignOutButton
-          style={{ width: '100%', background: 'none', border: '1px solid #E0E0E0', borderRadius: 4, padding: '6px 12px', fontSize: 12, color: '#6B7280', cursor: 'pointer', textAlign: 'center' }}
-        />
-      </div>
     </aside>
   )
 }

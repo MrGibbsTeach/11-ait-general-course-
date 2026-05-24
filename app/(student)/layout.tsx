@@ -1,19 +1,10 @@
-import { requireStudent } from '@/lib/auth-helpers'
 import { getUnits } from '@/lib/db-queries/courses'
 import StudentSidebar from '@/components/layout/StudentSidebar'
 import TopNav from '@/components/layout/TopNav'
 import MobileNav from '@/components/layout/MobileNav'
 
-function initials(name: string) {
-  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-}
-
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
-  const session = await requireStudent()
   const units = await getUnits()
-
-  const fullName = session.user.fullName ?? session.user.name ?? 'Student'
-  const userInitials = initials(fullName)
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F7F8FC' }}>
@@ -23,11 +14,11 @@ export default async function StudentLayout({ children }: { children: React.Reac
       </div>
 
       {/* Mobile nav */}
-      <MobileNav units={units} userName={fullName} userInitials={userInitials} />
+      <MobileNav units={units} />
 
       {/* Main content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <TopNav userName={fullName} userInitials={userInitials} />
+        <TopNav />
         <main style={{ flex: 1, padding: '32px 24px' }}>
           {children}
         </main>

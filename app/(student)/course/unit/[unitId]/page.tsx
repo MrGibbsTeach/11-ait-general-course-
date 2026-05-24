@@ -1,10 +1,8 @@
 import { getUnitById } from '@/lib/db-queries/courses'
-import { requireStudent } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 export default async function UnitPage({ params }: { params: Promise<{ unitId: string }> }) {
-  await requireStudent()
   const { unitId } = await params
   const unit = await getUnitById(unitId)
 

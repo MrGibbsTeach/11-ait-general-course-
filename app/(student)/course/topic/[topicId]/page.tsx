@@ -1,5 +1,4 @@
 import { getTopicById } from '@/lib/db-queries/courses'
-import { requireStudent } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { LessonRow } from '@/types/database'
@@ -36,7 +35,6 @@ function LessonRow({ lesson, index }: { lesson: LessonRow; index: number }) {
 }
 
 export default async function TopicPage({ params }: { params: Promise<{ topicId: string }> }) {
-  await requireStudent()
   const { topicId } = await params
   const topic = await getTopicById(topicId)
 

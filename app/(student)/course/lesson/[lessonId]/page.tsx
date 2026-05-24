@@ -1,5 +1,4 @@
 import { getLessonById } from '@/lib/db-queries/courses'
-import { requireStudent } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
@@ -11,7 +10,6 @@ const TYPE_BADGE_COLOR: Record<string, { bg: string; color: string }> = {
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ lessonId: string }> }) {
-  await requireStudent()
   const { lessonId } = await params
   const lesson = await getLessonById(lessonId)
 

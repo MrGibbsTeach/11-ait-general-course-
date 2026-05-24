@@ -2,16 +2,13 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import SignOutButton from '@/components/SignOutButton'
 import type { UnitRow } from '@/types/database'
 
 interface MobileNavProps {
   units: UnitRow[]
-  userName?: string
-  userInitials?: string
 }
 
-export default function MobileNav({ units, userName, userInitials }: MobileNavProps) {
+export default function MobileNav({ units }: MobileNavProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -51,7 +48,7 @@ export default function MobileNav({ units, userName, userInitials }: MobileNavPr
         {/* Nav */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '12px 0' }}>
           <Link href="/dashboard" onClick={() => setOpen(false)} style={{ display: 'block', padding: '10px 16px', fontSize: 14, color: '#1B1B1B', textDecoration: 'none', fontWeight: 500 }}>
-            ⊞ Dashboard
+            ⊞ Overview
           </Link>
 
           <div style={{ padding: '8px 16px 4px', fontSize: 10, fontWeight: 600, color: '#6B7280', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Units</div>
@@ -73,20 +70,6 @@ export default function MobileNav({ units, userName, userInitials }: MobileNavPr
             )
           })}
         </nav>
-
-        {/* Footer */}
-        <div style={{ padding: '12px 16px', borderTop: '1px solid #E0E0E0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#EAF0FD', color: '#1865F2', fontWeight: 700, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {userInitials ?? 'S'}
-            </div>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#1B1B1B' }}>{userName}</div>
-              <div style={{ fontSize: 11, color: '#6B7280' }}>Student</div>
-            </div>
-          </div>
-          <SignOutButton style={{ width: '100%', background: 'none', border: '1px solid #E0E0E0', borderRadius: 4, padding: '6px 12px', fontSize: 12, color: '#6B7280', cursor: 'pointer' }} />
-        </div>
       </div>
 
       <style>{`
