@@ -57,7 +57,7 @@ export interface AssignmentWithSubmission extends AssignmentRow {
 }
 
 export interface ClassWithTeacher extends ClassRow {
-  teacher: Pick<UserRow, 'id' | 'full_name' | 'email' | 'avatar_url'>
+  teacher: Pick<UserRow, 'id' | 'full_name' | 'avatar_url'>
 }
 
 // ============================================================

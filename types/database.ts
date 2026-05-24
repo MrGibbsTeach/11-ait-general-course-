@@ -16,14 +16,11 @@ export type SubmissionStatus = 'not_submitted' | 'submitted' | 'marked' | 'retur
 
 export interface UserRow {
   id: string
-  name: string | null
-  email: string | null
-  emailVerified: string | null
-  image: string | null
-  full_name: string | null
+  username: string | null
+  full_name: string
   role: UserRole
+  pin_hash: string | null
   avatar_url: string | null
-  password_hash: string | null
   created_at: string
   updated_at: string
 }

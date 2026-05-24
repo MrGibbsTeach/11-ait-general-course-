@@ -6,18 +6,25 @@ const PUBLIC_ROUTES = ['/login', '/signup', '/teacher-login']
 export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
-  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
+  const role = req.auth?.user?.role
+  const isPublic = PUBLIC_ROUTES.some(r => nextUrl.pathname.startsWith(r))
 
-  if (!isLoggedIn && !isPublicRoute) {
-    const loginUrl = new URL('/login', req.url)
-    loginUrl.searchParams.set('redirectedFrom', nextUrl.pathname)
-    return NextResponse.redirect(loginUrl)
+  if (!isLoggedIn && !isPublic) {
+    return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  if (isLoggedIn && isPublicRoute) {
-    const role = req.auth?.user?.role
-    const dest = role === 'teacher' ? '/portal' : '/dashboard'
-    return NextResponse.redirect(new URL(dest, req.url))
+  // Teacher → portal, student → dashboard role guards
+  if (isLoggedIn && role === 'teacher' && nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/portal', req.url))
+  }
+
+  if (isLoggedIn && role === 'student' && nextUrl.pathname.startsWith('/portal')) {
+    return NextResponse.redirect(new URL('/dashboard', req.url))
+  }
+
+  // Already logged in — redirect away from auth pages
+  if (isLoggedIn && isPublic) {
+    return NextResponse.redirect(new URL(role === 'teacher' ? '/portal' : '/dashboard', req.url))
   }
 
   return NextResponse.next()
