@@ -623,6 +623,7 @@ const topic2Lessons = [
             ['VPN', 'Creates an encrypted tunnel for your internet traffic, hiding your activity and IP', 'Eavesdropping, tracking on public Wi-Fi'],
             ['WPA3', 'Latest Wi-Fi encryption protocol — stronger than WPA2', 'Unauthorised Wi-Fi access, password cracking'],
             ['Two-Factor Authentication (2FA)', 'Requires a second verification step (e.g. SMS code) beyond a password', 'Account takeover even if password is stolen'],
+            ['Antivirus Software', 'Scans files, downloads, and programs for known malware, blocking or quarantining threats automatically', 'Viruses, trojans, ransomware, spyware, and other malware'],
             ['Network Access Control', 'Restricts which devices can connect to the network', 'Unauthorised devices connecting'],
           ],
         },
