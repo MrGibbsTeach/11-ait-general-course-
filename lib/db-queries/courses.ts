@@ -48,3 +48,11 @@ export async function getLessonById(id: string): Promise<LessonRow | null> {
   )
   return rows[0] ?? null
 }
+
+export async function getLessonsForTopic(topicId: string): Promise<LessonRow[]> {
+  const { rows } = await pool.query<LessonRow>(
+    'SELECT * FROM lessons WHERE topic_id = $1 ORDER BY order_index',
+    [topicId]
+  )
+  return rows
+}
