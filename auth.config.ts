@@ -1,7 +1,9 @@
 import type { NextAuthConfig } from 'next-auth'
 
+const PUBLIC_ROUTES = ['/login', '/signup', '/teacher-login']
+
 // Edge-safe config — no pg, no bcrypt.
-// Used by middleware. Full providers live in lib/auth.ts.
+// Routing logic lives here so middleware.ts stays trivial.
 export const authConfig = {
   session: { strategy: 'jwt' },
   pages: {
@@ -9,6 +11,24 @@ export const authConfig = {
     error: '/login',
   },
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user
+      const role = (auth?.user as { role?: string } | undefined)?.role
+      const path = nextUrl.pathname
+      const isPublic = PUBLIC_ROUTES.some(r => path.startsWith(r))
+
+      if (isLoggedIn && role === 'teacher' && path.startsWith('/dashboard')) {
+        return Response.redirect(new URL('/portal', nextUrl))
+      }
+      if (isLoggedIn && role === 'student' && path.startsWith('/portal')) {
+        return Response.redirect(new URL('/dashboard', nextUrl))
+      }
+      if (isLoggedIn && isPublic) {
+        return Response.redirect(new URL(role === 'teacher' ? '/portal' : '/dashboard', nextUrl))
+      }
+      if (!isLoggedIn && !isPublic) return false
+      return true
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id
